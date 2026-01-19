@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>予約フォーム</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        /* 右端の細いナビ（固定） */
+        .side-nav {
+            position: fixed;
+            right: -5px;
+            top: 80%;
+            transform: translateY(-50%) translateX(16px);
+            background: #45c4b7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4px;
+            border-radius: 10px 0 0 10px;
+            z-index: 1000;
+            width: 35px;
+        }
+
+        .side-nav a:active {
+            transform: scale(1.0);
+        }
+
+        .side-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 10px;
+            margin: 5px 0;
+            padding: 5px;
+            transition: background 0.3s, transform 0.2s;
+            border-radius: 5px;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+        }
+
+        .side-nav a span {
+            font-size: 24px;
+            position: absolute;
+            left: 2px;
+            top: 13px;
+        }
+
+        /* スマホ用の微調整 */
+        @media (max-width: 600px) {
+            .side-nav {
+                right: 2px;
+                width: 30px;
+            }
+
+            .side-nav a {
+                width: 28px;
+                height: 28px;
+            }
+
+            .side-nav a i {
+                font-size: 12px;
+            }
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-top: 5px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background-color: #fdfdfd;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 96%;
+            max-width: 500px;
+            padding: 25px;
+            box-sizing: border-box;
+            margin: 0 auto;
+            padding-bottom: 60px; /* スクロール余白 */
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #45c4b7, #45c4b7);
+            color: white;
+            padding: 20px;
+            border-radius: 0 0px 0px 0px;
+            text-align: center;
+            display: block;
+            margin: -20px -15px 20px -15px;
+            font-size: 26px;
+            font-weight: 100;
+            box-shadow: inset 0 -5px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 20px;
+            padding: 3px;
+            font-weight: 400;
+            background-color: #45c4b7;
+            color: #ffffff;
+            border-radius: 0px;
+            font-size: 18px;
+            text-align: center;
+            text-indent: 20px;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+
+        .labelkibounitizi {
+            display: block;
+            margin: 10px 0;
+            padding: 3px 0;
+            font-weight: 400;
+            background-color: #45c4b7;
+            color: #ffffff;
+            border-radius: 0px;
+            font-size: 18px;
+            text-align: center;
+            text-indent: 20px;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            line-height: 1.2;
+        }
+
+        .labeltyuuou {
+            display: block;
+            margin-bottom: 20px;
+            padding: 3px;
+            background-color: #45c4b7;
+            color: #ffffff;
+            border-radius: 0px;
+            font-size: 18px;
+            text-align: center;
+            text-indent: 0px;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+
+        .labelmessezi {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            padding: 3px;
+            background-color: #45c4b7;
+            color: #ffffff;
+            border-radius: 0px;
+            font-size: 18px;
+            text-align: center;
+            text-indent: 0px;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+
+        .required {
+            color: #ffffff;
+            font-weight: lighter;
+            font-size: 0.6em;
+            margin-left: 5px;
+            vertical-align: 0.8em;
+            background-color: rgb(255, 15, 15);
+            padding: 0 5px;
+            border-radius: 3px;
+            margin-right: 5px;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #555555;
+            border-radius: 3px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: all 0.3s;
+            position: relative;
+            top: -5px;
+        }
+
+        .request-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .request-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #2e2e2e;
+            border-radius: 4px;
+            background-color: #f7f7f7;
+            cursor: pointer;
+            box-sizing: border-box;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .request-buttons button.active {
+            background-color: #ffffff;
+            color: #141414;
+            outline: 1px solid #2b2b2b;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px #45c4b7;
+        }
+
+        .calendar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            width: 100%;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -6px 0;
+        }
+
+        hr {
+            margin: -5px 0;
+        }
+
+        .edit-button {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+            width: auto;
+            text-align: center;
+        }
+
+        .edit-button:hover {
+            background-color: #45c4b7;
+            color: #ffffff;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #45c4b7;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #3e3f41;
+            color: #000000;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #e9e9e9;
+            transform: scale(1.05);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #45c4b7;
+            margin-top: 12px;
+            color: #fff;
+        }
+
+        .submit-button:hover {
+            background-color: #45c4b7;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            input,
+            button {
+                font-size: 14px;
+            }
+        }
+
+        .datetime-input {
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            border: 1px solid #000000;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: #fff;
+            color: #333;
+            appearance: none;
+            touch-action: manipulation;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .datetime-input:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+            outline: none;
+        }
+
+        .small-text {
+            font-size: 22px;
+        }
+
+        .dt-grid {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dt-grid .datetime-input {
+            flex: 1 1 50%;
+        }
+
+        @media (max-width: 480px) {
+            .dt-grid {
+                flex-direction: column;
+            }
+        }
+
+        .time-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* 項目表示切り替え用 */
+        .input-group {
+            display: none; /* 初期状態は非表示 */
+        }
+        .input-group.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="side-nav" id="sideNav">
+        <a href="#section-message">
+            <span>⇩</span>
+            <i class="fas fa-comment"></i>
+        </a>
+    </div>
+
+    <div class="container">
+        <h1>
+            <span class="small-text">青木サービス</span><br>
+            予約フォーム
+        </h1>
+
+        <div class="label">お客様名<span class="required">必須</span></div>
+        <input type="text" id="name" placeholder="お名前を入力してください" oninput="saveInput('name')">
+
+        <div class="label">電話番号<span class="required">必須</span></div>
+        <input type="tel" id="phone" placeholder="電話番号を入力してください" oninput="saveInput('phone')">
+
+        <div class="label">搬出先住所<span class="required">必須</span></div>
+        <input type="text" id="address" placeholder="住所を入力してください" oninput="saveInput('address')">
+
+        <div class="label" id="requestSection">ご依頼内容<span class="required">必須</span></div>
+        <div class="request-buttons">
+            <button type="button" id="typeTruck" onclick="selectRequestType(this, 'truck')">トラック詰め放題</button>
+            <button type="button" id="typeIndividual" onclick="selectRequestType(this, 'individual')">個別回収</button>
+        </div>
+
+        <div id="groupTruck" class="input-group">
+            <div class="label">回収希望のもの（トラック詰め放題）</div>
+            <textarea id="itemsTruck" rows="4" placeholder="回収希望のものを入力してください"></textarea>
+        </div>
+
+        <div id="groupIndividual" class="input-group">
+            <div class="label">回収希望のもの（個別回収）</div>
+            <textarea id="itemsIndividual" rows="4" placeholder="回収希望のものを入力してください"></textarea>
+        </div>
+
+        <div class="labelkibounitizi" id="kibou1">希望日時（第1）<span class="required">必須</span></div>
+        <div class="datetime-wrapper" style="text-align: center;">
+            <span class="placeholder" id="placeholder1">⇩タップして日時を入力⇩</span>
+            <input type="hidden" id="date1" name="date1">
+            <div class="dt-grid">
+                <select id="date1_day" class="datetime-input" aria-label="日付を選択"></select>
+                <select id="date1_time" class="datetime-input" aria-label="時間（00/30のみ）"></select>
+            </div>
+        </div>
+
+        <div class="labelkibounitizi" id="kibou2">希望日時（第2）<span class="required">必須</span></div>
+        <div class="datetime-wrapper" style="text-align: center;">
+            <span class="placeholder" id="placeholder2">⇩タップして日時を入力⇩</span>
+            <input type="hidden" id="date2" name="date2">
+            <div class="dt-grid">
+                <select id="date2_day" class="datetime-input" aria-label="日付を選択"></select>
+                <select id="date2_time" class="datetime-input" aria-label="時間（00/30のみ）"></select>
+            </div>
+        </div>
+
+        <div class="labelkibounitizi" id="kibou3">希望日時（第3）<span class="required">必須</span></div>
+        <div class="datetime-wrapper" style="text-align: center;">
+            <span class="placeholder" id="placeholder3">⇩タップして日時を入力⇩</span>
+            <input type="hidden" id="date3" name="date3">
+            <div class="dt-grid">
+                <select id="date3_day" class="datetime-input" aria-label="日付を選択"></select>
+                <select id="date3_time" class="datetime-input" aria-label="時間（00/30のみ）"></select>
+            </div>
+        </div>
+
+        <div class="labelmessezi">ご質問・ご要望等<br>ございましたらご記入ください</div>
+        <textarea id="message" rows="4" placeholder="メッセージを入力してください"></textarea>
+
+        <div class="labeltyuuou">ご予約内容確認</div>
+        <div id="displayInfo"></div> <button class="submit-button" onclick="submitForm()" id="section-message">予約を行う</button>
+    </div>
+
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script>
+        let selectedRequestTypeVal = ''; // 選択された依頼内容
+        let currentDate = new Date();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            liff.init({
+                liffId: '2005254357-zKma9BZk'
+            }).then(() => {
+                console.log('LIFF初期化成功');
+            }).catch((err) => {
+                console.log('LIFF初期化失敗', err);
+            });
+        });
+
+        // 入力内容をローカルストレージに保存
+        function saveInput(id) {
+            const value = document.getElementById(id).value;
+            localStorage.setItem(id, value);
+            updateDisplayInfo(); // 入力時に表示更新
+        }
+
+        // ページ読み込み時の復元
+        document.addEventListener('DOMContentLoaded', function () {
+            const savedName = localStorage.getItem('name');
+            const savedPhone = localStorage.getItem('phone');
+            const savedAddress = localStorage.getItem('address');
+
+            if (savedName) document.getElementById('name').value = savedName;
+            if (savedPhone) document.getElementById('phone').value = savedPhone;
+            if (savedAddress) document.getElementById('address').value = savedAddress;
+            
+            updateDisplayInfo();
+        });
+
+        // スムーズスクロール
+        document.querySelectorAll('.side-nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 依頼内容の選択処理
+        function selectRequestType(button, type) {
+            // 全ボタンのリセット
+            document.getElementById('typeTruck').classList.remove('active');
+            document.getElementById('typeIndividual').classList.remove('active');
+            
+            // 入力エリアのリセット（非表示）
+            document.getElementById('groupTruck').classList.remove('active');
+            document.getElementById('groupIndividual').classList.remove('active');
+
+            // 選択されたボタンをアクティブに
+            button.classList.add('active');
+            
+            // 状態更新
+            if (type === 'truck') {
+                selectedRequestTypeVal = 'トラック詰め放題';
+                document.getElementById('groupTruck').classList.add('active');
+            } else if (type === 'individual') {
+                selectedRequestTypeVal = '個別回収';
+                document.getElementById('groupIndividual').classList.add('active');
+            }
+            
+            updateDisplayInfo();
+        }
+
+        function formatDateTime(dateTimeString) {
+            if (!dateTimeString) return '未選択';
+            const [dPart, tPart] = dateTimeString.split('T');
+            if (!dPart || !tPart) return '未選択';
+
+            const [year, month, day] = dPart.split('-').map(n => parseInt(n, 10));
+            const [hours, minutes] = tPart.split(':').map(n => parseInt(n, 10));
+
+            return `${year}年${month}月${day}日　${hours}時${String(minutes).padStart(2, '0')}分`;
+        }
+
+        function updateDisplayInfo() {
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            
+            // ご依頼内容
+            const requestTypeText = selectedRequestTypeVal 
+                ? `<span style="color:#45c4b7;"><strong>【ご依頼内容】</strong></span><br>・${selectedRequestTypeVal}` 
+                : '・ご依頼内容が未選択です';
+
+            // 回収希望のもの（選択されている方だけ取得）
+            let itemsText = '';
+            if (selectedRequestTypeVal === 'トラック詰め放題') {
+                const val = document.getElementById('itemsTruck').value;
+                itemsText = val ? `<br>（希望品）${val}` : '';
+            } else if (selectedRequestTypeVal === '個別回収') {
+                const val = document.getElementById('itemsIndividual').value;
+                itemsText = val ? `<br>（希望品）${val}` : '';
+            }
+
+            // 日時
+            const d1 = document.getElementById('date1').value;
+            const d2 = document.getElementById('date2').value;
+            const d3 = document.getElementById('date3').value;
+
+            const date1Text = d1 ? `・<span style="color:#45c4b7;"><strong>第1希望</strong></span><br>${formatDateTime(d1)}` : '・第1希望日が未選択です';
+            const date2Text = d2 ? `・<span style="color:#45c4b7;"><strong>第2希望</strong></span><br>${formatDateTime(d2)}` : '・第2希望日が未選択です';
+            const date3Text = d3 ? `・<span style="color:#45c4b7;"><strong>第3希望</strong></span><br>${formatDateTime(d3)}` : '・第3希望日が未選択です';
+
+            // 表示用HTML生成
+            document.getElementById('displayInfo').innerHTML = `
+                <div class="info-row">
+                    <p><span style="color:#45c4b7;"><strong>【お名前】</strong></span><br>・${name}</p>
+                    <button class="edit-button" onclick="scrollToElement('name')">修正</button>
+                </div>
+                <hr>
+                <div class="info-row">
+                    <p><span style="color:#45c4b7;"><strong>【搬出先住所】</strong></span><br>・${address}</p>
+                    <button class="edit-button" onclick="scrollToElement('address')">修正</button>
+                </div>
+                <hr>
+                <div class="info-row">
+                    <p>${requestTypeText}${itemsText}</p>
+                    <button class="edit-button" onclick="scrollToElement('requestSection')">修正</button>
+                </div>
+                <hr>
+                <div class="info-row">
+                    <p>${date1Text}</p>
+                    <button class="edit-button" onclick="scrollToElement('kibou1')">修正</button>
+                </div>
+                <hr>
+                <div class="info-row">
+                    <p>${date2Text}</p>
+                    <button class="edit-button" onclick="scrollToElement('kibou2')">修正</button>
+                </div>
+                <hr>
+                <div class="info-row">
+                    <p>${date3Text}</p>
+                    <button class="edit-button" onclick="scrollToElement('kibou3')">修正</button>
+                </div>
+                <hr>
+            `;
+        }
+
+        // スクロール関数
+        function scrollToElement(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // テキストエリア入力時も表示更新
+        document.getElementById('itemsTruck').addEventListener('input', updateDisplayInfo);
+        document.getElementById('itemsIndividual').addEventListener('input', updateDisplayInfo);
+
+        // 日時ロジック
+        document.getElementById('date1').addEventListener('change', updateDisplayInfo);
+        document.getElementById('date2').addEventListener('change', updateDisplayInfo);
+        document.getElementById('date3').addEventListener('change', updateDisplayInfo);
+
+        const JP_WD = ['日', '月', '火', '水', '木', '金', '土'];
+        const pad = n => String(n).padStart(2, '0');
+
+        // 日付生成
+        function buildDateOptions(selectEl, days = 120, startDate = new Date()) {
+            const d = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+            selectEl.innerHTML = '<option value="" disabled selected>日付を選択</option>';
+
+            for (let i = 0; i < days; i++) {
+                const wd = d.getDay(); 
+                // 定休日ロジックは削除（全日営業）
+                
+                const y = d.getFullYear();
+                const m = pad(d.getMonth() + 1);
+                const day = pad(d.getDate());
+                const value = `${y}-${m}-${day}`;
+                const label = `${y}/${m}/${day}（${JP_WD[wd]}）`;
+
+                const opt = document.createElement('option');
+                opt.value = value;
+                opt.textContent = label;
+                selectEl.appendChild(opt);
+
+                d.setDate(d.getDate() + 1);
+            }
+        }
+
+// 営業時間設定（08:00〜20:00 ※20:30は除外されるようロジック側で調整）
+        const WEEKLY_HOURS = {
+            0: { start: 8, end: 20 }, // 日曜
+            1: { start: 8, end: 20 }, // 月曜
+            2: { start: 8, end: 20 }, // 火曜
+            3: { start: 8, end: 20 }, // 水曜
+            4: { start: 8, end: 20 }, // 木曜
+            5: { start: 8, end: 20 }, // 金曜
+            6: { start: 8, end: 20 }  // 土曜
+        };
+
+        function buildHalfHourOptions(selectEl, weekday) {
+            selectEl.innerHTML = '<option value="" disabled selected>時間を選択</option>';
+            const { start, end } = WEEKLY_HOURS[weekday] || { start: 8, end: 20 };
+
+            for (let h = start; h <= end; h++) {
+                for (const m of [0, 30]) {
+                    // ★【修正箇所】終了時間（20時）の場合は30分（20:30）を表示しない
+                    if (h === end && m === 30) continue;
+
+                    const hh = pad(h);
+                    const mm = pad(m);
+                    const opt = document.createElement('option');
+                    opt.value = `${hh}:${mm}`;
+                    opt.textContent = `${hh}:${mm}`;
+                    selectEl.appendChild(opt);
+                }
+            }
+        }
+
+        function updateHiddenAndPlaceholder(baseId) {
+            const day = document.getElementById(`${baseId}_day`).value;
+            const time = document.getElementById(`${baseId}_time`).value;
+            const hidden = document.getElementById(baseId);
+            const ph = document.getElementById(`placeholder${baseId.slice(-1)}`);
+
+            hidden.value = day && time ? `${day}T${time}` : "";
+            if (ph) ph.style.display = hidden.value ? 'none' : '';
+            if (typeof updateDisplayInfo === 'function') updateDisplayInfo();
+        }
+
+        function initPicker(baseId, dateDays = 120) {
+            const daySel = document.getElementById(`${baseId}_day`);
+            const timeSel = document.getElementById(`${baseId}_time`);
+
+            buildDateOptions(daySel, dateDays);
+            timeSel.innerHTML = '<option value="" selected hidden>時間を選択</option>';
+            timeSel.classList.add('time-disabled');
+
+            daySel.addEventListener('change', () => {
+                const dateVal = daySel.value;
+                if (dateVal) {
+                    const d = new Date(dateVal);
+                    const wd = d.getDay();
+                    buildHalfHourOptions(timeSel, wd);
+                    timeSel.classList.remove('time-disabled');
+                } else {
+                    timeSel.innerHTML = '<option value="" selected hidden>時間を選択</option>';
+                    timeSel.classList.add('time-disabled');
+                }
+                updateHiddenAndPlaceholder(baseId);
+            });
+            timeSel.addEventListener('change', () => updateHiddenAndPlaceholder(baseId));
+        }
+
+        ['date1', 'date2', 'date3'].forEach(id => initPicker(id, 120));
+
+
+        // 送信処理
+        function submitForm() {
+            const formData = {
+                name: document.getElementById('name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                requestType: selectedRequestTypeVal,
+                itemsTruck: document.getElementById('itemsTruck').value.trim(),
+                itemsIndividual: document.getElementById('itemsIndividual').value.trim(),
+                dates: [
+                    document.getElementById('date1').value,
+                    document.getElementById('date2').value,
+                    document.getElementById('date3').value
+                ],
+                message: document.getElementById('message').value.trim()
+            };
+
+            // バリデーション
+            if (!formData.name) return alert('お名前を入力してください。');
+            if (!formData.phone) return alert('電話番号を入力してください。');
+            if (!formData.address) return alert('搬出先住所を入力してください。');
+            if (!formData.requestType) return alert('ご依頼内容を選択してください。');
+            if (!formData.dates[0]) return alert('第1希望日※必須を選択してください。');
+
+            // 回収希望品の整理
+            let itemsText = '特になし';
+            if (formData.requestType === 'トラック詰め放題' && formData.itemsTruck) {
+                itemsText = formData.itemsTruck;
+            } else if (formData.requestType === '個別回収' && formData.itemsIndividual) {
+                itemsText = formData.itemsIndividual;
+            }
+
+            // LINE送信
+            liff.sendMessages([{
+                type: 'text',
+                text: `【予約フォーム】\n\n《お名前》\n${formData.name}\n\n《電話番号》\n${formData.phone}\n\n《搬出先住所》\n${formData.address}\n\n《ご依頼内容》\n${formData.requestType}\n\n《回収希望のもの》\n${itemsText}\n\n【希望日時】\n《第1希望》\n${formatDate(formData.dates[0])}\n\n《第2希望》\n${formatDate(formData.dates[1])}\n\n《第3希望》\n${formatDate(formData.dates[2])}\n\n《ご質問・ご要望》\n${formData.message}`
+            }]).then(() => {
+                alert('送信しました。確認してご連絡差し上げます。');
+                liff.closeWindow();
+            }).catch((err) => {
+                console.error('送信エラー', err);
+                alert('送信に失敗しました。');
+            });
+        }
+
+        function formatDate(datetime) {
+            if (!datetime) return '（未選択）';
+            const date = new Date(datetime);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            return `${year}年${month}月${day}日 ${hours}:${minutes}`;
+        }
+    </script>
+</body>
+
+</html>
