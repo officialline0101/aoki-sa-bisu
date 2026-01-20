@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>予約フォーム</title>
+    <title>仮予約フォーム</title>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
         /* 右端の細いナビ（固定） */
@@ -386,7 +386,7 @@
     <div class="container">
         <h1>
             <span class="small-text">青木サービス</span><br>
-            予約フォーム
+            仮予約フォーム
         </h1>
 
         <div class="label">お客様名<span class="required">必須</span></div>
@@ -447,8 +447,8 @@
         <div class="labelmessezi">ご質問・ご要望等<br>ございましたらご記入ください</div>
         <textarea id="message" rows="4" placeholder="メッセージを入力してください"></textarea>
 
-        <div class="labeltyuuou">ご予約内容確認</div>
-        <div id="displayInfo"></div> <button class="submit-button" onclick="submitForm()" id="section-message">予約を行う</button>
+        <div class="labeltyuuou">仮予約内容確認</div>
+        <div id="displayInfo"></div> <button class="submit-button" onclick="submitForm()" id="section-message">仮予約を行う</button>
     </div>
 
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
@@ -747,7 +747,7 @@
             // LINE送信
             liff.sendMessages([{
                 type: 'text',
-                text: `【予約フォーム】\n\n《お名前》\n${formData.name}\n\n《電話番号》\n${formData.phone}\n\n《搬出先住所》\n${formData.address}\n\n《ご依頼内容》\n${formData.requestType}\n\n《回収希望のもの》\n${itemsText}\n\n【希望日時】\n《第1希望》\n${formatDate(formData.dates[0])}\n\n《第2希望》\n${formatDate(formData.dates[1])}\n\n《第3希望》\n${formatDate(formData.dates[2])}\n\n《ご質問・ご要望》\n${formData.message}`
+                text: `【仮予約フォーム】\n\n《お名前》\n${formData.name}\n\n《電話番号》\n${formData.phone}\n\n《搬出先住所》\n${formData.address}\n\n《ご依頼内容》\n${formData.requestType}\n\n《回収希望のもの》\n${itemsText}\n\n【希望日時】\n《第1希望》\n${formatDate(formData.dates[0])}\n\n《第2希望》\n${formatDate(formData.dates[1])}\n\n《第3希望》\n${formatDate(formData.dates[2])}\n\n《ご質問・ご要望》\n${formData.message}`
             }]).then(() => {
                 alert('送信しました。確認してご連絡差し上げます。');
                 liff.closeWindow();
@@ -772,3 +772,4 @@
 
 
 </html>
+
